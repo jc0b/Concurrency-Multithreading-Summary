@@ -6,8 +6,7 @@ before_install:
 script:
 - mkdir _build
 - pdflatex -interaction=nonstopmode  -output-directory _build main.tex
-- pwd
-- ls
+- chmod +x deploy.sh
 before_deploy:
       # Set up git user name and tag this commit
       - git config --local user.name "Travis CI"
@@ -25,6 +24,7 @@ deploy:
 
 #discord channel integration, I should probably mirror this sh file somewhere just in case    
 after_success:
+  - ./deploy.sh
   - wget http://assets.jacobsburley.com/send.sh
   - chmod +x send.sh
   - ./send.sh success $WEBHOOK_URL
