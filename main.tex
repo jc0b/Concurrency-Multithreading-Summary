@@ -121,6 +121,11 @@ $a\rightarrow b$ denotes that $a$ happens before $b$. This is \textit{total orde
 \bigbreak Let $a$ and $b$ be events by the \textit{same thread}, with $a \rightarrow b$.
 \bigbreak$(a,b)$ denotes the time interval between these events.
 \\We write $(a,b) \rightarrow (a',b')$ if $b \rightarrow a'$. This is \textit{partial order}.
+
+\subsection{Mutual Exclusion}
+A critical section is a block of code that should be executed by at most one thread at a time. 
+\bigbreak Let $CS$ and $CS'$ be time intervals in which two different threads execute their critical sections.
+\bigbreak Mutual exclusion: for each such pair, $CS \rightarrow CS'$ or $CS' \rightarrow CS$
 \bigbreak Shared counters are useful to have when performing a simple task with multiple threads, as it leads to less memory usage for variables as well as a fairly simple way to synchronize threads. Shared counters have \textbf{risks}: two or more threads could read the value of the counter at the \textit{same time}, and both increment it. Reading a counter and increasing its value are \textit{distinct atomic steps}. Both threads then analyze the value of the counter, while the next value is then skipped.
 \\\textbf{Solutions to this}:
 \begin{itemize}
