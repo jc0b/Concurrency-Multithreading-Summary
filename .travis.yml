@@ -1,0 +1,34 @@
+sudo: required
+dist: trusty
+before_install:
+- sudo apt-get -qq update && sudo apt-get install -y --no-install-recommends texlive-fonts-recommended
+  texlive-latex-extra texlive-fonts-extra dvipng texlive-latex-recommended
+script:
+- mkdir _build
+- pdflatex -interaction=nonstopmode  -output-directory _build main.tex
+- pwd
+- ls
+before_deploy:
+      # Set up git user name and tag this commit
+      - git config --local user.name "Travis CI"
+      - git config --local user.email "travis@travis-ci.org"
+      - git tag "$(date +'%Y%m%d%H%M%S')-$(git log --format=%h -1)"
+deploy:
+  provider: releases
+  api_key:
+    secure: wolIvz13IMTXdQJA3ZMqJ4ejrFJ4qtYlJKR5UzZ9OU17nFAOIM/cHpGDLGlnjpibpXLXYytlO50O8q1yuji/998RCGz9TSAizcV+s6JWehPFqQrvLMkL5e1vx7XkdhdgsboNF+2ur/dXqnOGxsxTF+OGSZ1cVpTviSQP6WjLO8yz3EMKVXZqWpQzu8tSskFPJTmQVRK0JffK9YjCuN+TG37SVlbm1hR1xFDCdz+GyQ1z2SdWc2BsYlLXHRFp8yewseGwL0fmfqkfFqp/Elnpjr8UM3p6ayLFYo38adB3jw4a3YDcSdgduxQFU7eOCJVWASSnfjzrgrIsB+J25IX5OgJfxu+SFRgQ7p8YzXCGlBKECSEB3FrEtJ4yMgrW4F4AvJ4q0lhh3bwUT7dwcRIXe4g7HgA9aPuxTbeeCZZ6rowPXsx6T2DjVrgl5aXxwRLIfUYTfFDpHwT351/JH5krlMFKAQqFMemQ4wMavbSPl2BZsFAyxCRqYcdY8RnPXcvWNbyrG+i6m0fsaR1C48rt33ItUZghsiCGQ42Ns+K4tP4G/KXJbbj5AVbiDAoA+sBgr2pU48CH1v4+J7uDvn/OoQTojFuGuemsPjoJXilNd8luFMsWHk7FmS2yzRjAIetDLOSXKi/C2hmGRz6FhvYKd/c+xtIDnihr8jGOcJfnsNk=
+  file_glob: true
+  file: _build/*
+  skip_cleanup: true
+  on:
+    repo: jc0b/Concurrency-Multithreading-Summary
+
+#discord channel integration, I should probably mirror this sh file somewhere just in case    
+after_success:
+  - wget http://assets.jacobsburley.com/send.sh
+  - chmod +x send.sh
+  - ./send.sh success $WEBHOOK_URL
+after_failure:
+  - wget http://assets.jacobsburley.com/send.sh
+  - chmod +x send.sh
+  - ./send.sh failure $WEBHOOK_URL
